@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Event server client API sandbox</title>
+        <link rel="stylesheet" media="screen" href="assets/main.css">
+        <script src="assets/jquery-1.9.0.min.js" type="text/javascript"></script>
+        <script src="../src/client-api.js" type="text/javascript"></script>
+    </head>
+    <body>
+        
+
+    <h1>Event server Client API sandbox</h1>
+ 
+    <div id="chatLog"></div>
+ 
+    <button id="connectChannel">Connect to channel</button>
+    <button id="disconnectChannel">Disconnect from channel</button>
+    <button id="malformed">Malformed</button>
+    <div>Message: <input id="text" type="text"/></div>
+ 
+    <script>
+    
+    $(document).ready(function() {
+     
+        var socket = new WebSocket("ws://vps77209.ovh.net:9000/ws");
+
+        connect();
+     
+        function connect(){
+            try{
+         
+         
+                message('<p class="event">Socket status: '+socket.readyState);
+         
+                socket.onopen = function(){
+                     message('<p class="event">Socket status: '+socket.readyState+' (open)');
+                }
+         
+                socket.onmessage = function(msg){
+                     message('<p class="message">Received: '+msg.data);
+                }
+         
+                socket.onclose = function(){
+                     message('<p class="event">Socket status: '+socket.readyState+' (Closed)');
+                }          
+         
+            } catch(exception){
+                 message('<p>Error'+exception);
+            }
+        }
+        
+        function message(msg){
+            $('#chatLog').append(msg+'</p>');
+        }
+        
+        $('#text').keypress(function(event) {
+            if (event.keyCode == '13') {
+                sendEvent();
+            }
+        });
+        
+        function sendEvent(){
+             
+            var text = $('#text').val();
+            if(text==""){
+                message('<p class="warning">Please enter a message');
+                return ;
+            }
+            msg = {message: "send-to-channel", event: {id:"chat/1", content: text}}
+            sendMsg(msg)
+            $('#text').val("");
+         
+        }
+        
+        function sendMsg(msg){
+            try{
+                json = JSON.stringify(msg);
+                socket.send(json);
+                message('<p class="event">Sent: ' + json)
+            } catch(exception){
+                message('<p class="warning"> Error:' + exception);
+            }
+        }
+        
+        $('#connectChannel').click(function(){
+            msg = {message: "connect", channel:"channel1", device:"device1", password:"pass1"}
+            sendMsg(msg)
+        });
+        
+        $('#disconnectChannel').click(function(){
+            msg = {message: "disconnect"}
+            sendMsg(msg)
+        });
+        
+        $('#malformed').click(function(){
+            msg = {message: "aaa"}
+            sendMsg(msg)
+        });
+    });
+    
+    </script>   
+
+    </body>
+</html>
