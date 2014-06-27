@@ -52,8 +52,8 @@ function channelConnect(url, channelName, deviceName, password){
 	        }
 	 
 	        _connection._socket.onclose = function(){
-	        	_connection.onError("Connection closed. Trying to recoonect...");
-	        	_connect(); 
+	        	_connection.onError("Connection closed. Trying to recoonect in 3 seconds.");
+				window.setTimeout(_connect,3000)
 	        }          
 	 
 	    } catch(exception){
