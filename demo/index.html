@@ -31,8 +31,8 @@
     
     $(document).ready(function() {
 
-        var url = "ws://vps77209.ovh.net:9000/ws";
-        //var url = "ws://localhost:9000/ws";
+        //var url = "ws://vps77209.ovh.net:9000/ws";
+        var url = "ws://localhost:9000/ws";
         var channelName = "test";
     	// Client A
         var deviceName1 = "clientA";
@@ -78,7 +78,7 @@
         }
 
         // Client B
-        var deviceName2 = "clientA";
+        var deviceName2 = "clientB";
         var password2 = "pass";
         var connection2 = channelConnect(url, channelName, deviceName2, password2);
 
