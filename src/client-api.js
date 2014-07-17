@@ -28,6 +28,11 @@ function channelConnect(url, channelName, deviceName, password){
 			msg = {message: "send-to-channel", event:{id: id, content:content}}
 	        _connection._sendMsg(msg);
 		},
+		/** send message to device */
+		sendToDevice: function(destDevice, msg, params) {
+			msg = {message: "send-to-device", event:{device: destDevice, id: msg, params: params}}
+	        _connection._sendMsg(msg);
+		},
 		_sendMsg: function(msg){
 	        try{
 	            json = JSON.stringify(msg);
@@ -80,6 +85,9 @@ function channelConnect(url, channelName, deviceName, password){
 		var event = JSON.parse(resp.data);
 		if(event.message == "channel-event"){
 			_connection.onEvent(event.event.id, event.event.content);
+		}
+		else if(event.message == "message-event"){
+			_connection.onMessage(event.event.device, event.event.id, event.event.params);
 		}
 	}
 	
