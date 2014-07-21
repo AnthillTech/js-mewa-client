@@ -1,9 +1,9 @@
-# JavaScript client API
+# JavaScript client API 
 
 
-This is JavaScript library which simplifies connection to the event server.
+This is JavaScript library which simplifies connection to the [Channel Server](https://github.com/AnthillTech/channel-server).
 
-## Usage
+## Sample usage pattern
 
 * connectToChannel
 * sendMessageToChannel
