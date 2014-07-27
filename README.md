@@ -1,7 +1,7 @@
 # JavaScript client API 
 
 
-This is JavaScript library which simplifies connection to the [Channel Server](https://github.com/AnthillTech/channel-server).
+This is JavaScript library which simplifies connection to the [Channel Server](https://github.com/AnthillTech/mewa).
 
 ## Sample usage pattern
 
