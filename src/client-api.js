@@ -88,7 +88,13 @@ function channelConnect(url, channelName, deviceName, password){
 	
 	function _processMessage(resp){
 		var event = JSON.parse(resp.data);
-		if(event.message == "channel-event"){
+		if(event.message == "joined-channel"){
+			_connection.onChannelEvent("joined", event.device);
+		}
+		else if(event.message == "left-channel"){
+			_connection.onChannelEvent("left", event.device);
+		}
+		else if(event.message == "channel-event"){
 			_connection.onEvent(event.event.id, event.event.content);
 		}
 		else if(event.message == "message-event"){

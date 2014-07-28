@@ -89,12 +89,20 @@
               message("Error: " + reason);
             }
           
+            connection.onChannelEvent = function(type, deviceName){
+            	if(type == "joined"){
+            		message("Device " + deviceName + " joined channel.");
+                } else {
+                	message("Device " + deviceName + " left channel.");
+                }            	
+            }
+            
             connection.onEvent = function(id, content){
-            	if(id == "picture"){
+                if(id == "picture"){
                     messageImage(chatLog, content);
                 } else {
-                	message("Event received id: " + id + " content:" + content);
-                }            	
+                    message("Event received id: " + id + " content:" + content);
+                }               
             }
             
             connection.onMessage = function(from, id, params){
