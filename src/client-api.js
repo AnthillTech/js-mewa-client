@@ -53,12 +53,13 @@ function channelConnect(url, channelName, deviceName, password){
 		},
 		/** Received set property command */
 		onPropertyValue: function(fromDevice, property, value) {},
-		
 		/** Get list of all connected to the channel devices */
 		getDevices: function() {
 			msg = {message: "get-devices"}
 	        _connection._sendMsg(msg);
 		},
+		/** Received set property command */
+		onDevicesEvent: function(devices) {},
 		_sendMsg: function(msg){
 	        try{
 	            json = JSON.stringify(msg);
