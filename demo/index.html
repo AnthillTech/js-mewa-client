@@ -111,19 +111,6 @@
                 message("Received message <b>" + msgId + "</b> from <b>" + device + "</b> with params: <b>" + params + "</b>");
             }
             
-            connection.onPropertyChanged = function(device, property, value){
-                message("Property <b>" + property + "</b> on device <b>" + device + "</b> changed to value: <b>" + value + "</b>");
-            }
-            
-            connection.onGetProperty = function(device, property){
-                message("Device <b>" + device + "</b> asked for property <b>" + property + "</b>.");
-                connection.sendPropertyValue(device, "level", "13");
-            }
-            
-            connection.onPropertyValue = function(device, property, value){
-                message(device + "." + property + " = <b>" + value + "</b>.");
-            }
-       
             function message(msg){
               chatLog.append("<p class='event'>" + msg + "</p>");
             }
