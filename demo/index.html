@@ -58,7 +58,7 @@
 
         $("#sendImageBtn1").click(function(event) {
             var image1 = document.getElementById('image1');
-            connection1.sendToChannel("picture", image1.src);
+            connection1.sendEvent("picture", image1.src);
         });
 
         $("#textMsg1").keypress(function(event) {
