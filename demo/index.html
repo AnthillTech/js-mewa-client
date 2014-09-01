@@ -58,7 +58,8 @@
 
         $("#sendImageBtn1").click(function(event) {
             var image1 = document.getElementById('image1');
-            connection1.sendEvent("picture", image1.src);
+            var params = {data:image1.src};            
+            connection1.sendMessage("deviceB", "com.followit24.service.image.Image", JSON.stringify(params));
         });
 
         $("#textMsg1").keypress(function(event) {
@@ -108,20 +109,27 @@
             }
             
             connection.onMessage = function(device, msgId, params){
-                message("Received message <b>" + msgId + "</b> from <b>" + device + "</b> with params: <b>" + params + "</b>");
+            	if(msgId == "com.followit24.service.image.Image"){
+            	    messageImage(JSON.parse(params).data)            		
+            	} else {
+            	    message("Received message <b>" + msgId + "</b> from <b>" + device + "</b> with params: <b>" + params + "</b>");
+            	}
             }
             
             function message(msg){
               chatLog.append("<p class='event'>" + msg + "</p>");
             }
+
+            function messageImage(data){
+            	chatLog.append("<img src='" + data + "'/>");
+            }
+
             return connection;
           }
           
     });
     
-    function messageImage(log, data){
-        log.append("<img src='" + data + "'/>");
-    }
+    
     
     </script>   
 
