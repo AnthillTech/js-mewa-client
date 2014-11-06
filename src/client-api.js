@@ -13,7 +13,9 @@
  *   deviceName - name of device. This device needs permission to access channel
  *   password - device password
  */
-function channelConnect(url, channelName, deviceName, password){
+function channelConnect(url, channelName, deviceName, password, listenTo){
+	
+	listenTo = (typeof listenTo === "undefined") ? [] : listenTo;
 	
 	var _connection = {
 		_socket: null,
@@ -26,12 +28,15 @@ function channelConnect(url, channelName, deviceName, password){
 		/** Device left */
 		onDeviceLeftChannel: function(name) {},
 		/** send event to all devices */
-		sendEvent: function(eventId, params) {
-			msg = {type: "send-event", id: eventId, params: params}
+		sendEvent: function(eventId, params, ack) {
+			ack= (typeof ack === "undefined") ? false : ack;
+			msg = {type: "send-event", id: eventId, params: params, ack: ack}
 	        _connection._sendMsg(msg);
 		},
 		/** Received event */
 		onEvent: function(device, eventId, params) {},
+		/** Received ack */
+		onAck: function() {},
 		/** send event to all devices */
 		sendMessage: function(device, msgId, params) {
 			msg = {type: "send-message", device: device, id: msgId, params: params}
@@ -46,6 +51,7 @@ function channelConnect(url, channelName, deviceName, password){
 		},
 		/** Received set property command */
 		onDevicesEvent: function(devices) {},
+
 		_sendMsg: function(msg){
 	        try{
 	            json = JSON.stringify(msg);
@@ -80,7 +86,7 @@ function channelConnect(url, channelName, deviceName, password){
 	}
 	
 	function _sendJoinPacket(){
-		msg = {type: "connect", channel:channelName, device:deviceName, password:password};
+		msg = {type: "connect", channel:channelName, device:deviceName, password:password, subscribe: listenTo};
         _connection._sendMsg(msg);
         _connection._socket.onmessage = function(resp){
         	var event = JSON.parse(resp.data);
@@ -110,6 +116,9 @@ function channelConnect(url, channelName, deviceName, password){
 		}
 		else if(packet.type == "devices-event"){
 			_connection.onDevicesEvent(packet.devices, packet.time);
+		}
+		else if(packet.type == "ack"){
+			_connection.onAck();
 		}
 	}
 	
